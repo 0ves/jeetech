@@ -151,14 +151,14 @@ const Navbar = ({ isMenuOpen, toggleMenu, navigateTo, currentView, scrolled , hn
         onClick={() => navigateTo('home')}
         className="flex items-center gap-2 font-bold text-2xl tracking-tighter text-blue-600 cursor-pointer"
       >
-        <div className="bg-blue-600 text-white p-1.5 rounded-lg">
-          <Laptop size={24} />
+        <div className=" text-white p-1.5 rounded-lg">
+          <img src="/removebg-preview.png" alt="Jee Technologies Logo" className="w-10 h-10" />
         </div>
         <span>Jee Technologies.</span>
       </div>
 
       {/* Desktop Nav */}
-      <div className="hidden md:flex items-center gap-8 font-medium text-gray-600">
+      <div className="hidden md:flex items-center gap-8 font-medium text-gray-600 mx-6">
         <button onClick={() => navigateTo('home')} className={`hover:text-blue-600 transition-colors ${currentView === 'home' ? 'text-blue-600 font-bold' : ''}`}>Home</button>
         <button onClick={() => navigateTo('catalog')} className={`hover:text-blue-600 transition-colors ${currentView === 'catalog' ? 'text-blue-600 font-bold' : ''}`}>Catalog</button>
         <a href="#corporate" className="hover:text-blue-600 transition-colors">Corporate & Servers</a>
