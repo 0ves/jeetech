@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import "react-google-reviews/dist/index.css";
+import PopUpModal from './components/PopUpModal';
 import { 
   Laptop, 
-  ShoppingBag, 
-  Star, 
+  ShoppingBag,
   MapPin, 
   Phone, 
   Mail, 
@@ -10,11 +11,7 @@ import {
   X, 
   ChevronRight, 
   ShieldCheck, 
-  Truck, 
-  Clock, 
   Cpu,
-  Search,
-  Filter,
   Server,
   Leaf,
   Briefcase,
@@ -22,18 +19,19 @@ import {
   ArrowLeft,
   Recycle
 } from 'lucide-react';
-
+import ReviewsWidget from "./components/ReviewsWidgets";
 // --- Data Constants ---
+
 
 const PRODUCTS = [
   {
     id: 1,
-    name: "MacBook Pro M3 Max",
+    name: "MacBook Air M1",
     category: "Laptops",
-    specs: "16-inch, 32GB RAM, 1TB SSD",
-    buyPrice: "$2,499",
-    rentPrice: "$150/mo",
-    image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    specs: "16-inch, 16GB RAM, 512 SSD",
+    buyPrice: "Rs 34,999",
+    rentPrice: "Rs 1500/mo",
+    image: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcS9nvwZtEsLhQQ1VnbfchDh23hA6iNu9P6w-yaF5jbv90I0bkdnNUPpfF4K4I0wtQh7nGlM2692EFM9xFp14qGjOgAmqkSlzWnrJG7E04wWKTo3XCpvyI1ySwRyCDwJuA97J2xeqx7w&usqp=CAc",
     tag: "Premium"
   },
   {
@@ -41,104 +39,68 @@ const PRODUCTS = [
     name: "Dell PowerEdge R750",
     category: "Servers",
     specs: "Rack Server, Dual Xeon Gold, 128GB",
-    buyPrice: "$4,899",
-    rentPrice: "$350/mo",
-    image: "https://images.unsplash.com/photo-1558494949-ef2cb3bbcc73?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    buyPrice: "Rs 1,22,999",
+    rentPrice: "",
+    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcQjPXH5vVuhU0FGxx-6JFFAqU1EBHqTRhd3Py4Weo5dqEhc95BTASeleSgDsP2yjUZHFSBqVX-H4gQILCMjKci8F-4-ambZPBTjaG_623i0WYjZZ5LhiuSY&usqp=CAc",
     tag: "Enterprise"
   },
   {
     id: 3,
-    name: "Dell XPS 15",
+    name: "Dell Latitude 5520",
     category: "Laptops",
-    specs: "15.6-inch OLED, i9, 32GB RAM",
-    buyPrice: "$1,899",
+    specs: "15.6-inch OLED, i7, 16 GB RAM",
+    buyPrice: "Rs 32,500",
     rentPrice: "$110/mo",
-    image: "https://images.unsplash.com/photo-1593642632823-8f78536788c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    tag: "Best Seller"
-  },
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRjaxB1JYJl9oF9IsZWX2CRn2kD8HPinXZaA&s",  },
   {
     id: 4,
     name: "HPE ProLiant DL380",
     category: "Servers",
-    specs: "Gen10 Plus, Scalable Performance",
-    buyPrice: "$3,550",
-    rentPrice: "$280/mo",
-    image: "https://images.unsplash.com/photo-1544197150-b99a580bbcbf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+    specs: "Gen8 Plus, Scalable Performance",
+    buyPrice: "Rs 32,550",
+    rentPrice: "",
+    image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSmiWORR7OcGskwr-daLSAQNt1XIz1uGAFHihmWig4QCIFMBdzruFAM_A_UxN6R1ArPj9YrkvtXt4kNE-fTh4G4k6C76M9-bmam1DZ91Sys1t__suCUOTo2Pg&usqp=CActag:",
     tag: "Server"
   },
-  {
-    id: 5,
-    name: "Asus ROG Zephyrus",
-    category: "Laptops",
-    specs: "Gaming Beast, RTX 4080, 240Hz",
-    buyPrice: "$2,100",
-    rentPrice: "$130/mo",
-    image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    tag: "Gaming"
-  },
+  // {
+  //   id: 5,
+  //   name: "Asus ROG Zephyrus",
+  //   category: "Laptops",
+  //   specs: "Gaming Beast, RTX 4080, 240Hz",
+  //   buyPrice: "$2,100",
+  //   rentPrice: "$130/mo",
+  //   image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+  //   tag: "Gaming"
+  // },
   {
     id: 6,
-    name: "Lenovo ThinkPad X1",
+    name: "Lenovo ThinkPad i5 Gen 11",
     category: "Laptops",
-    specs: "Business Class, Carbon Fiber",
-    buyPrice: "$1,650",
-    rentPrice: "$95/mo",
-    image: "https://images.unsplash.com/photo-1544731612-de7f96afe55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    tag: "Business"
+    specs: "Business Class, 16GB RAM, 512GB SSD",
+    buyPrice: "Rs 30,000",
+    rentPrice: "",
+    image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTt6-fdkO20j11cRo90fj46KsnNXun3ULyc2hYCoPeat-C5T8TImC6lNifY2BvF2abjnQOPlogVr7Z5QE8zaIsS-akoehRaTGslmlLcTHhPjYMHtg9jpp8q6Ynqfy8nCRkUyIM1vg&usqp=CAc",   tag: "Business"
   },
   {
     id: 7,
-    name: "HP Spectre x360",
-    category: "Laptops",
-    specs: "2-in-1 Convertible, Touchscreen",
-    buyPrice: "$1,450",
-    rentPrice: "$85/mo",
-    image: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    tag: "Versatile"
+    name: "HP 840 Z book ",
+    category: "Laptops ",
+    specs: "2-in-1 Convertible, , i5 Gen 11, 16GB RAM",
+    buyPrice: "Rs 28,500",
+    rentPrice: "",
+    image: "https://encrypted-tbn1.gstatic.com/shopping?q=tbn:ANd9GcRfpjHQ9USfEanCHil6-iWGbctTDvcvjogDXb5NHSuzeh_2hmOKk7efeAKVI8IMBOJCX4TzibgjePg_s59j9zjP7CXf3bdbWe0NG7JqNc2nlNNX9vWA4YlXLg",   tag: "Versatile"
   },
   {
     id: 8,
     name: "MacBook Air M2",
     category: "Laptops",
     specs: "13.6-inch, Midnight, 16GB RAM",
-    buyPrice: "$1,199",
-    rentPrice: "$70/mo",
-    image: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-    tag: "Popular"
+    buyPrice: "Rs 47,000",
+    rentPrice: "",
+    image: "https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcRxf2QPKnWmsE4pUUyXrvFb1XXQ2zIi_FmzLljUxd_QhqtfJzArgEfoXQ9Pu5MlT37XtalCxXt22wHOVM0lc9Hm2YePTbEJk11leA9tAghTuMTsExI2o6xVSFJrLYZ1w-BzMFkVfnw&usqp=CAc",  tag: "Popular"
   }
 ];
 
-const REVIEWS = [
-  {
-    id: 1,
-    name: "Sarah Jenkins",
-    role: "CTO, TechStart Inc",
-    date: "2 days ago",
-    rating: 5,
-    text: "We contracted Jee Technologies for our entire dev team's hardware. The server deployment was flawless and the rental terms are unbeatable.",
-    avatar: "SJ"
-  },
-  {
-    id: 2,
-    name: "Michael Chen",
-    role: "Freelance Designer",
-    date: "1 week ago",
-    rating: 5,
-    text: "Bought a refurbished Dell XPS. It works like new but for half the price. Their customer service team is incredibly helpful.",
-    avatar: "MC"
-  },
-  {
-    id: 3,
-    name: "David Ross",
-    role: "IT Manager, CorpFlow",
-    date: "3 weeks ago",
-    rating: 4,
-    text: "Excellent service on the E-Waste recycling contract. They handled our old fleet disposal with full green certification compliance.",
-    avatar: "DR"
-  }
-];
-
-// --- Shared Components ---
 
 const ProductCard = ({ product, activeTab } : { product: any, activeTab: string }) => (
   <div className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col">
@@ -182,7 +144,7 @@ const ProductCard = ({ product, activeTab } : { product: any, activeTab: string 
   </div>
 );
 
-const Navbar = ({ isMenuOpen, toggleMenu, navigateTo, currentView, scrolled } : { isMenuOpen: boolean, toggleMenu: () => void, navigateTo: (view: 'home' | 'catalog') => void, currentView: string, scrolled: boolean }) => (
+const Navbar = ({ isMenuOpen, toggleMenu, navigateTo, currentView, scrolled , hndlclick } : { isMenuOpen: boolean, toggleMenu: () => void, navigateTo: (view: 'home' | 'catalog') => void, currentView: string, scrolled: boolean, hndlclick: () => void }) => (
   <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-md shadow-lg py-3' : 'bg-transparent py-5'}`}>
     <div className="container mx-auto px-4 md:px-8 flex justify-between items-center">
       <div 
@@ -207,7 +169,7 @@ const Navbar = ({ isMenuOpen, toggleMenu, navigateTo, currentView, scrolled } : 
         <div className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 border border-green-200">
           <Leaf size={12} /> Green Certified
         </div>
-        <button className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105 shadow-md flex items-center gap-2">
+        <button onClick={hndlclick} className="bg-blue-600 text-white px-5 py-2.5 rounded-full font-semibold hover:bg-blue-700 transition-transform transform hover:scale-105 shadow-md flex items-center gap-2">
           B2B Inquiry
         </button>
       </div>
@@ -345,7 +307,7 @@ const CorporateSolutions = () => (
             <Server size={32} />
           </div>
           <h3 className="text-xl font-bold text-gray-900 mb-3">Server & Infrastructure</h3>
-          <p className="text-gray-500 mb-6">High-performance rack and tower servers available for purchase or rent. Optimized for virtualization, databases, and AI workloads.</p>
+          <p className="text-gray-500 mb-6">High-performance rack and tower servers available for purchase. Optimized for virtualization, databases, and AI workloads.</p>
           <ul className="space-y-2 mb-6 text-gray-600 text-sm">
             <li className="flex items-center gap-2"><ShieldCheck size={16} className="text-green-500"/> On-Site Setup Support</li>
             <li className="flex items-center gap-2"><ShieldCheck size={16} className="text-green-500"/> Custom Configurations</li>
@@ -398,7 +360,7 @@ const FeaturedInventory = ({ products, activeTab, setActiveTab, navigateTo } : a
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {products.slice(0, 3).map((product : any) => (
+        {products.slice(0, 4).map((product : any) => (
           <ProductCard key={product.id} product={product} activeTab={activeTab} />
         ))}
       </div>
@@ -415,31 +377,36 @@ const FeaturedInventory = ({ products, activeTab, setActiveTab, navigateTo } : a
   </section>
 );
 
-const Reviews = ({ reviews }: { reviews: any[] }) => (
+const Reviews = () => (
   <section id="reviews" className="py-24 bg-white overflow-hidden border-t border-gray-100">
     <div className="container mx-auto px-4 md:px-8">
       <div className="flex flex-col md:flex-row items-center justify-between mb-12">
          <div className="flex items-center gap-4 mb-4 md:mb-0">
-           <div className="w-12 h-12 bg-white border border-gray-200 rounded-full shadow-sm flex items-center justify-center">
+           {/* <div className="w-12 h-12 bg-white border border-gray-200 rounded-full shadow-sm flex items-center justify-center">
              <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-6 h-6" />
-           </div>
+           </div> */}
            <div>
-             <h2 className="text-2xl font-bold text-gray-900">Google Reviews</h2>
+             {/* <h2 className="text-2xl font-bold text-gray-900">Google Reviews</h2> */}
              <div className="flex items-center gap-2">
-               <span className="font-bold text-orange-400">4.9</span>
-               <div className="flex text-orange-400">
+               {/* <span className="font-bold text-orange-400">4.9</span> */}
+               {/* <div className="flex text-orange-400">
                  {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="currentColor" />)}
-               </div>
-               <span className="text-sm text-gray-500">(1,240 Reviews)</span>
+               </div> */}
+               {/* <span className="text-sm text-gray-500">(1,240 Reviews)</span> */}
              </div>
            </div>
          </div>
-         <button className="px-6 py-2 border border-gray-300 rounded-full text-gray-700 font-medium hover:bg-gray-100 transition-colors">
+         {/* <button className="px-6 py-2 border border-gray-300 rounded-full text-gray-700 font-medium hover:bg-gray-100 transition-colors">
            Write a Review
-         </button>
+         </button> */}
       </div>
+      {/* <ReactGoogleReviews
+      layout="carousel" // Choose from "badge", "carousel", or "custom"
+      featurableId={featurableWidgetId}
+    /> */}
+     <ReviewsWidget />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {reviews.map((review) => (
           <div key={review.id} className="bg-gray-50 p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center justify-between mb-4">
@@ -455,12 +422,13 @@ const Reviews = ({ reviews }: { reviews: any[] }) => (
               <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google" className="w-4 h-4 opacity-50" />
             </div>
             <div className="flex text-orange-400 mb-3">
-              {[...Array(review.rating)].map((_, i) => <Star key={i} size={14} fill="currentColor" />)}
+             
             </div>
             <p className="text-gray-600 text-sm leading-relaxed">"{review.text}"</p>
           </div>
         ))}
-      </div>
+      </div> */}
+      
     </div>
   </section>
 );
@@ -480,7 +448,7 @@ const Contact = () => (
               </div>
               <div>
                 <h4 className="font-bold text-lg">Jee Technologies HQ</h4>
-                <p className="text-gray-400">123 Innovation Drive, Tech District<br/>New York, NY 10011</p>
+                <p className="text-gray-400">Shop no.21, East Street Galleria, 2421, <br/>East St, near post Office, Camp, Pune, Maharashtra 411001</p>
               </div>
             </div>
             
@@ -490,8 +458,8 @@ const Contact = () => (
               </div>
               <div>
                 <h4 className="font-bold text-lg">B2B & Sales</h4>
-                <p className="text-gray-400">+1 (555) 123-4567</p>
-                <p className="text-xs text-gray-500 mt-1">Mon-Fri: 9am - 8pm</p>
+                <p className="text-gray-400">+91 9822852472</p>
+                <p className="text-xs text-gray-500 mt-1">Mon-sun: 10am - 8pm</p>
               </div>
             </div>
 
@@ -509,9 +477,9 @@ const Contact = () => (
         
         <div className="lg:w-1/2 min-h-[400px] relative bg-gray-700">
            <iframe 
-             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.119763973046!3d40.69766374874431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1645564756836!5m2!1sen!2sin" 
-             width="100%" 
+             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3049.361644263903!2d73.87986749999997!3d18.511903400000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c1800a268f17%3A0x624900dd4b787b92!2sJEE%20TECH%20Laptop%20Repair%20Center%20Near%20Me%20Camp%2FComputer%20Store%20Camp%2FOld%20laptop%2Fimportant%20laptop%2FNew%20Apple%20Mac%2FM1%2FRepair%20Center!5e1!3m2!1sen!2sin!4v1764095187011!5m2!1sen!2sin"
              height="100%" 
+             width="100%"
              style={{border:0}} 
             //  allowFullScreen="" 
              loading="lazy"
@@ -560,7 +528,7 @@ const Footer = () => (
           </ul>
         </div>
         
-        <div>
+        {/* <div>
           <h4 className="text-white font-bold mb-6">Stay Updated</h4>
           <div className="flex gap-2">
             <input 
@@ -572,14 +540,14 @@ const Footer = () => (
               <ChevronRight size={20} />
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
       
       <div className="border-t border-gray-900 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
-        <p>&copy; 2024 Jee Technologies. All rights reserved.</p>
+        <p>&copy; 2025 Jee Technologies. All rights reserved.</p>
         <div className="flex gap-6 mt-4 md:mt-0">
-          <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-          <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+          {/* <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" className="hover:text-white transition-colors">Terms of Service</a> */}
         </div>
       </div>
     </div>
@@ -662,6 +630,7 @@ const App = () => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
+   
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -674,6 +643,12 @@ const App = () => {
     window.scrollTo(0, 0);
   };
 
+   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+   
+
   return (
     <div className="font-sans text-gray-900 bg-gray-50 min-h-screen flex flex-col">
       <Navbar 
@@ -682,7 +657,10 @@ const App = () => {
         navigateTo={navigateTo} 
         currentView={currentView} 
         scrolled={scrolled} 
+        hndlclick={openModal}
       />
+
+      
 
       {currentView === 'home' ? (
         <>
@@ -703,8 +681,11 @@ const App = () => {
           navigateTo={navigateTo} 
         />
       )}
+<Reviews  />
 
-      <Reviews reviews={REVIEWS} />
+      <PopUpModal isOpen={isModalOpen} onClose={closeModal} />
+      
+      
       <Contact />
       <Footer />
     </div>
