@@ -62,16 +62,7 @@ const PRODUCTS = [
     image: "https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcSmiWORR7OcGskwr-daLSAQNt1XIz1uGAFHihmWig4QCIFMBdzruFAM_A_UxN6R1ArPj9YrkvtXt4kNE-fTh4G4k6C76M9-bmam1DZ91Sys1t__suCUOTo2Pg&usqp=CActag:",
     tag: "Server"
   },
-  // {
-  //   id: 5,
-  //   name: "Asus ROG Zephyrus",
-  //   category: "Laptops",
-  //   specs: "Gaming Beast, RTX 4080, 240Hz",
-  //   buyPrice: "$2,100",
-  //   rentPrice: "$130/mo",
-  //   image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
-  //   tag: "Gaming"
-  // },
+  
   {
     id: 6,
     name: "Lenovo ThinkPad i5 Gen 11",
