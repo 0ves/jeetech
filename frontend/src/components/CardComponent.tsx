@@ -1,5 +1,5 @@
 
-import { ChevronRight } from 'lucide-react'; // Assuming you use lucide-react icons
+import { ChevronRight } from 'lucide-react'; 
 
 const CardComponent = ({ onClick } : any) => {
   return (
